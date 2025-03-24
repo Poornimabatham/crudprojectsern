@@ -12,6 +12,20 @@ const Home = () => {
       .catch((err) => console.log(err));
   }, []);
 
+
+
+  const handleDelete = (id) => {
+    if (window.confirm("Are you sure you want to delete this employee?")) {
+      axios
+        .delete(`http://localhost:8001/deleteemployees/${id}`)
+        .then(() => {
+          setData(data.filter((row) => row.Id !== id)); // Remove from UI
+        })
+        .catch((err) => console.log(err));
+    }
+  };
+
+  
   return (
     <div className="container mx-auto p-6">
       <h1 className="text-xl font-bold mb-4">Employee List</h1>
@@ -47,6 +61,23 @@ const Home = () => {
                 <td className="p-2 border border-gray-300">{row.EmployeeCode}</td>
                 <td className="p-2 border border-gray-300">{row.FirstName}</td>
                 <td className="p-2 border border-gray-300">{row.LastName}</td>
+                <td className="p-2 border border-gray-300 flex gap-2">
+              {/* Edit Button */}
+              <Link
+                to={`/edit/${row.Id}`}  // Pass the ID in the URL
+                className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-2 rounded"
+              >
+                Edit
+              </Link>
+
+              {/* Delete Button */}
+              <button
+                onClick={() => handleDelete(row.Id)} // Call handleDelete function with ID
+                className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
+              >
+                Delete
+              </button>
+            </td>
               </tr>
             ))}
           </tbody>
